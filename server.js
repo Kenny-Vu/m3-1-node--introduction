@@ -3,6 +3,7 @@
 // import the needed node_modules.
 const express = require("express");
 const morgan = require("morgan");
+const { query } = require("express");
 
 express()
   // Below are methods that are included in express(). We chain them for convenience.
@@ -42,6 +43,14 @@ express()
     setTimeout(() => {
       res.status(200).json({ status: 200, message });
     }, randomTime);
+  })
+  .get("/parrot-message", (req, res) => {
+    const message = { author: "parrot", text: req.query.text };
+    const randomTime = Math.floor(Math.random() * 3000);
+    setTimeout(() => {
+      res.status(200).json({ status: 200, message });
+    }, randomTime);
+    console.log(req.query);
   })
   // this serves up the homepage
   .get("/", (req, res) => {
