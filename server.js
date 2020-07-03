@@ -5,6 +5,20 @@ const express = require("express");
 const morgan = require("morgan");
 const { query } = require("express");
 
+const getBotMessage = (text) => {
+  const userTxt = text.replace(/[!&\/\\#,+()$~%.'":*?<>{}]/g, "");
+  console.log(userTxt);
+  const commonGreetings = ["hi", "hello", "howdy"];
+  const commonGoodbyes = ["goodbye", "farewell", "adios", "see you"];
+  let botMsg = "";
+  if (commonGreetings.includes(userTxt.toLowerCase())) {
+    botMsg = "Hello!";
+  } else if (commonGoodbyes.includes(userTxt.toLowerCase())) {
+    botMsg = "Goodbye!";
+  } else botMsg = "bzzt";
+  return botMsg;
+};
+
 express()
   // Below are methods that are included in express(). We chain them for convenience.
   // --------------------------------------------------------------------------------
@@ -51,6 +65,14 @@ express()
       res.status(200).json({ status: 200, message });
     }, randomTime);
     console.log(req.query);
+  })
+  .get("/bot-message", (req, res) => {
+    const reply = getBotMessage(req.query.text);
+    const message = { author: "bot", text: reply };
+    const randomTime = Math.floor(Math.random() * 3000);
+    setTimeout(() => {
+      res.status(200).json({ status: 200, message });
+    }, randomTime);
   })
   // this serves up the homepage
   .get("/", (req, res) => {
