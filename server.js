@@ -5,16 +5,29 @@ const express = require("express");
 const morgan = require("morgan");
 const { query } = require("express");
 
+const commonGreetings = ["hi", "hello", "howdy"];
+const commonGoodbyes = ["goodbye", "farewell", "adios", "see you", "bye"];
+const jokes = [
+  "What do you call the 2nd time you ride a bike? Recycling",
+  "My son proudly showed me his report card and shouted, 'Dad, I’m so happy! I got a B in reading!' I sighed, 'That’s a D, idiot.'",
+  "I didn’t know how much cookies shaped like integers cost, but I crunched the numbers",
+];
+let botMsg = "";
 const getBotMessage = (text) => {
   const userTxt = text.replace(/[!&\/\\#,+()$~%.'":*?<>{}]/g, "");
   console.log(userTxt);
-  const commonGreetings = ["hi", "hello", "howdy"];
-  const commonGoodbyes = ["goodbye", "farewell", "adios", "see you"];
-  let botMsg = "";
-  if (commonGreetings.includes(userTxt.toLowerCase())) {
+  if (botMsg === "Wanna hear a joke?") {
+    if (userTxt === "YES") {
+      botMsg = jokes[Math.floor(Math.random() * jokes.length)];
+    } else if (userTxt === "NO") {
+      botMsg = "Too bad...";
+    } else botMsg = "bzzt";
+  } else if (commonGreetings.includes(userTxt.toLowerCase())) {
     botMsg = "Hello!";
   } else if (commonGoodbyes.includes(userTxt.toLowerCase())) {
     botMsg = "Goodbye!";
+  } else if (userTxt === "something funny") {
+    botMsg = "Wanna hear a joke?";
   } else botMsg = "bzzt";
   return botMsg;
 };
